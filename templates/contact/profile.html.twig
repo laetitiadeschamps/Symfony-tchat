@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des contacts{% endblock %}
+
+{% block body %}
+
+<div class="list-container list-container--user-profile user-profile">
+  <header class="user-profile__picture">
+      <img src="{{asset('images/'~ contact.picture )}}" alt="contact-picture">
+  </header>
+  <div class="user-profile__infos">
+      <h3 class="user-infos__title">{{ contact.login }}</h3>
+      <aside class="user-infos__aside">  
+        {% set friendshipStatus = null %}
+        {% for friendship in contact.friends %}
+          {% if (friendship.friend == app.user )%}   
+             {% set friendshipStatus = friendship.status %}
+          {% endif %}
+        {% endfor %}
+     
+        {% if friendshipStatus == 1 %}
+              <small>Vous êtes amis avec cette personne</small> 
+        {% elseif friendshipStatus == 0 and friendshipStatus is not null %}
+              <small>Demande en cours d'approbation </small> 
+        {% elseif app.user != contact %}
+              <small>Vous n'êtes pas amis avec cette personne </small> 
+        {% endif %}
+     
+        {% if app.user ==  contact %}
+            <span>(Vous)</span>
+        {% elseif friendshipStatus == 1 %}
+            <a class="tooltip-outer" href="{{path('contact-unfriend', {id: contact.id})}}"> <i class="fas fa-user-minus"></i><span class="tooltip-inner">Supprimer de la liste d'amis</span></a> 
+        {% elseif friendshipStatus is null %}
+          <a class="tooltip-outer" href="{{path('contact-requestBefriend', {id: contact.id })}}"> <i class="fas fa-user-plus"></i><span class="tooltip-inner">Ajouter à la liste d'amis</span></a>
+        {% endif %}
+         
+      </aside>
+      <div class="user-infos__body">
+        <h3>Informations </h3>
+            <p> Nom : {{ contact.firstname }} {{ contact.lastname }}</p>
+            <p>Date de naissance : {{ contact.birthdate|date("d-m-Y")}}</p>
+            <p>Description : <span class="user-description"> {{ contact.description ?: 'Pas de description renseignée' }}</span></p>
+      </div>
+        {% if friendshipStatus == 1%}
+          {% set chatId = null %}
+          {% for chat in contact.chats|filter(v=> app.user in v.users) %}
+            {% set chatId = chat.id %}
+          {% endfor %}
+          <div class="user-infos__chat">
+            <a href="{{path('chat-getChat', {id:chatId})}}">Accéder au chat</a>
+          </div>
+        {% endif %}
+        
+    </div>
+ 
+</div>
+
+
+{% endblock %}
