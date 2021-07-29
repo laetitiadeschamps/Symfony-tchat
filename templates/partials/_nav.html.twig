@@ -11,10 +11,10 @@
         <nav>
             <div class="logo"><a href="{{path('main-home')}}"><img src="{{asset('images/logo.png')}}" alt=""></a> <h1>Ma messagerie en ligne</h1></div>
             {% if app.user %}
-                {# <div id="hamburger-nav">
+                 <div id="hamburger-nav">
                     <ul>
-                        <li><a href="{{path('chat-list')}}"> Mes conversations</a></li>
-                        <li><a href="{{path('contact-list')}}"> Contacts</a></li>
+                        {# <li><a href="{{path('chat-list')}}"> Mes conversations</a></li>
+                        <li><a href="{{path('contact-list')}}"> Contacts</a></li> #}
                         <li class="dropdown"> 
                                 <button class="dropbtn">Profil ( Connecté en tant que {{ app.user.login }})
                                 <i class="fa fa-caret-down"></i>
@@ -25,7 +25,7 @@
                                 </div>
                         </li>       
                     </ul>
-                </div> #}
+                </div> 
             {% endif %}
         </nav>  
     </header>
