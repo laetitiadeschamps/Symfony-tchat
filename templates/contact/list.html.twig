@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des contacts{% endblock %}
+
+{% block body %}
+
+<div class="list-container list-container--contacts">
+  <div class="list-search">
+      <div class="list-search__searchbar"><input type="text" placeholder="Saisissez un nom à chercher" id="searchText"><i class="fas fa-search"></i></div>
+      <div class="list-search__users-list">
+  </div>
+</div>
+<div class="contact-list">
+    <section>
+        <h3 class="contact-title">Mes contacts </h3>
+        {% for contact in friends %}
+            {% set chatId = null %}
+            {% for chat in contact.user.chats|filter(chat=> app.user in chat.users) %}
+                {% set chatId = chat.id %}
+            {% endfor %}
+  
+            <div class="contact-card">
+            <div class="contact-card__picture"><img src="{{asset('images/'~ contact.user.picture )}}" alt="contact-picure"></div> 
+            <div class="contact-card__body">
+                <p>
+                        <a href="{{path('contact-profile',{id:contact.user.id})}}"><span> {{ contact.user.firstname }} {{ contact.user.lastname }} </span></a>
+                        <div class="contact-card__actions">
+                            <a class="tooltip-outer" href="{{path('chat-getChat', {id:chatId})}}"> <i class="fas fa-comments"></i><span class="tooltip-inner">Accéder au chat</span> </a><a class="tooltip-outer" href="{{path('contact-unfriend', {id:contact.user.id})}}"><i class="fas fa-user-slash unfriend"></i><span class="tooltip-inner">Supprimer de la liste des amis</span></a>
+                        </div>
+                    </p>
+                </div>
+            </div>
+              
+        {% else %}
+            <div class="empty-display">Aucun contact pour le moment</div>
+        {% endfor %}
+   </section>
+   <section>
+         <h3 class="contact-title"> Demandes en cours d'approbation </h3>
+   
+        {% for contact in contactsPendingApproval %}
+            
+                <div class="contact-card">
+                    <div class="contact-card__picture"><img src="{{asset('images/'~ contact.user.picture )}}" alt="contact-picure"></div> 
+                    <div class="contact-card__body">
+                            <a href="{{path('contact-profile',{id:contact.user.id})}}"><span> {{ contact.user.firstname }} {{ contact.user.lastname }} </span></a>
+                            <div class="contact-card__actions">
+                                <span class="contact-card__choice"><a href="{{path('contact-befriend', {id:contact.user.id})}}"><i class="fas fa-check"></i></a><a href="{{path('contact-unfriend', {id:contact.user.id})}}"><i class="fas fa-times"></i></a></span>
+                            </div>   
+                    </div>
+                </div>
+              
+         {% else %}
+                <div class="empty-display">Aucun contact pour le moment</div> 
+                
+        {% endfor %}  
+</div>   
+
+<template id="user-template">
+        <div class="user-card">
+           <div class="user-card__picture"><img src="" alt="contact-picture"></div> 
+           <div style="display:none"></div>
+           <div class="user-card__body">
+               <p><a class="profile" href=""><span id="user-card__name"></span></a><a class="befriend"></p> 
+            </div>
+        </div>
+
+     
+</template>
+
+{% endblock %}
