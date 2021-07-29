@@ -57,6 +57,9 @@
                             <fieldset>
                                 <i class="fas fa-key"></i>{{ form_widget(registrationForm.plainPassword.first, {'attr':{'placeholder':'Votre mot de passe'}}) }} 
                             </fieldset> 
+                              <div class="form-error">
+                                    {{ form_errors(registrationForm.lastname) }}
+                                </div>
                         </article> 
                         <article> 
                             <fieldset>

@@ -273,8 +273,8 @@ nav ul li:not(.logo):hover, nav ul button:hover {
   justify-content: center;
 }
 .form-container:not(.form-container--profile) .form__body input {
-  margin:1em;
- 
+  margin:1.3em 1em;
+  font-size: 0.8em;
 }
 .form-container .form__body input::placeholder {
   color:var(--color-font-light);
@@ -365,8 +365,14 @@ nav ul li:not(.logo):hover, nav ul button:hover {
   max-width: 100%;
 }
 .form-container--create .form .form__body {
-  flex-direction: column;
+  flex-direction: row;
   flex-wrap: wrap;
+  justify-content: space-between;
+  width:80%;
+  margin:auto;
+}
+.form-container--create .form .form__body article {
+  width:45%;
 }
 .form-container--create .form fieldset{
  width:45em;
