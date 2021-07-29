@@ -14,7 +14,6 @@ class FileUpload
 
     public function __construct(SluggerInterface $slugger)
     {
-        
         $this->slugger = $slugger;
     }
 
@@ -29,7 +28,7 @@ class FileUpload
             $file->move($this->getTargetDirectory(), $fileName);
             return $fileName;
         } catch (FileException $e) {
-            // ... handle exception if something happens during file upload
+            return $e;
         }
         return null;
 

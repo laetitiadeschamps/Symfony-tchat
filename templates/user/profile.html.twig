@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon profile{% endblock %}
+
+{% block body %}
+<main>
+    <div class="form-container form-container--profile">
+       {{ form_start(form, {'attr':{'novalidate':'novalidate', 'class':'form'}}) }}
+            <header>
+                <h5 class="form__title"><span class="editBtn tooltip-outer">
+                    <i class="fas fa-user-edit" id="edit-profile"></i><span class="tooltip-inner">Modifier mon profil</span>
+                      <span class="error"> {{ form_errors(form.picture) }}</span>
+                </span> Mon profil</h5>
+                <div id="prevAvatar" class="avatarSelect hidden">
+                    <i class="fas fa-chevron-left"></i>
+                </div> 
+                <div class="form__image">
+                    <img src="{{asset('images/'~ app.user.picture)}}" class="form__image--picture" alt="profile-picture"> 
+                    <span class="close-container tooltip-outer"><i class="fas fa-close form__image--reset"><span class="tooltip-inner">Supprimer la photo</span></span></i>
+                    <label class="photoUpload tooltip-outer" for="{{ form.picture.vars.id }}"><i class="fas fa-folder-open"></i><span class="tooltip-inner">Charger une image</span></label>
+                    {{ form_widget(form.picture, {'attr':{'class':'hidden', 'id':'photoUpload'}}) }}
+                    {{ form_widget(form.avatar)}}
+                </div>
+                <div id="nextAvatar"  class="avatarSelect hidden">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </header>
+            <section class="form__body">
+                <fieldset>
+                    <span class="label">Login </span>
+                    <span data-name="login" class="login"> {{ app.user.login }}</span>
+                </fieldset>
+                <fieldset>
+                    <span class="label">Mail  </span>
+                    <span data-name="mail" class="mail">{{ app.user.email}}</span>
+                </fieldset>
+                <fieldset>
+                   {{form_label(form.firstname)}}
+                    <span data-name="fname" class="firstname"> {{app.user.firstname}}</span>
+                     {{ form_widget(form.firstname, {'attr':{'placeholder':'Prénom', 'class':'hidden'}}) }}
+                </fieldset>
+                <fieldset>
+                    {{form_label(form.lastname)}}
+                    <span data-name="name" class="lastname"> {{ app.user.lastname}} </span>
+                     {{ form_widget(form.lastname, {'attr':{'placeholder':'Nom', 'class':'hidden'}}) }}
+                </fieldset>
+                <fieldset>
+                    {{form_label(form.birthdate)}}
+                    <span data-name="birthdate" class="birthdate">{{ app.user.birthdate|date('d-m-Y') }}</span>
+                     {{ form_widget(form.birthdate, {'attr':{'placeholder':'Date de naissance', 'class':'hidden'}}) }}
+                </fieldset>
+                <fieldset>
+                     {{form_label(form.description)}}
+                    <span data-name="description" class="description">{{ app.user.description }}</span>
+                     {{ form_widget(form.description, {'attr':{'class':'hidden'}}) }}
+                </fieldset>
+                  <button class="btn submit">
+                    <i class="fas fa-check"></i> Valider les modifications
+                </button>
+               
+         {{ form_end(form) }}
+    </section>
+</div>
+
+
+</main>
+
+{% endblock %}

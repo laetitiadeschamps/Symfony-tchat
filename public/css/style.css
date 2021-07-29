@@ -357,6 +357,9 @@ nav ul li:not(.logo):hover, nav ul button:hover {
 .form-container--login small a, .form-container--create small a {
   text-decoration: underline;
 }
+.error {
+  font-size: 0.4em;
+}
 .form-container--login small a:hover, .form-container--create small a:hover {
   color:var(--color-font-light)
 }
@@ -552,7 +555,7 @@ input[type=date]::-webkit-calendar-picker-indicator {
   position: relative;
   margin:2em auto;
   width: 80%;
-  height: 15em;
+  height: 20em;
 }
 .form-container--profile header img {
   width:60%;
