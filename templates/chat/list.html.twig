@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des conversations {% endblock %}
+
+{% block body %}
+<div class="list-container list-container--conversations">
+
+   
+        <h3 class="contact-title">Mes conversations </h3>
+        
+        {% for chat in app.user.chats|filter((chat) => chat.messages|length > 0)|sort((a, b)=> b.updatedAt <=> a.updatedAt) %}
+        {% set contactObject = null %}
+        {% for contact in chat.users|filter(user => user != app.user) %}
+        {% set contactObject = contact %}
+        {% endfor %}
+            <div class="contact-card" id="{{chat.id}}">
+                <div class="contact-card__picture">
+                    <img src="{{asset('images/'~ contactObject.picture)}}" alt="contact-picture"> 
+                </div>
+                <div class="contact-card__body">
+                    <p>
+                        <a class="tooltip-outer" href="{{path('contact-profile', {id:contactObject.id})}}"><i class="fas fa-user"></i><span class="tooltip-inner">Voir le profil</span> </a>
+                        <a class="tooltip-outer" href="{{path('chat-getChat', {id:chat.id})}}">{{ contactObject.login }}<span class="tooltip-inner">Voir le chat</span> </a>
+                    </p> 
+                </div>
+                <div class="contact-card__lastMessage">  
+                    <div class="bubble contact-card__lastMessage--body">
+                        <div class="contact-card__lastMessage--text">{{chat.messages|last|raw}}</div>  
+                    </div>
+                    <p class="contact-card__lastMessage--aside"><span class="contact-card__lastMessage--author"> {{chat.messages|last.author.login}}</span>
+                    <span class="contact-card__lastMessage--date">
+                    {{chat.messages|last.createdAt|date('d/m')}} </span></p>
+                    <a href="{{path('chat-delete', {id:chat.id})}}" class="tooltip-outer" ><span class="tooltip-inner">Supprimer la conversation</span><i class="fas fa-trash"></i></a>  
+                </div>
+            </div>
+        {% else %}
+              <div class="empty-display">Aucune conversation en cours</div>
+       {% endfor %}
+    
+</div>
+{% endblock %}
