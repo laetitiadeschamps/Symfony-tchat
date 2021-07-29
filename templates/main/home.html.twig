@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil!{% endblock %}
+
+{% block body %}
+<div class="list-container list-container--home">
+    <section>
+        <h3 class="home-title"><i class="far fa-bell"></i> Mes notifications <span class="count"> count </span></h3>
+        <div class="home-body">
+            <div class="chat-list">
+               
+            </div>
+        </div>
+    </section>
+    <section>
+        <h3 class="home-title"><i class="fas fa-user-friends"></i> Mes demandes d'amis <span class="count">{{ requests|length }}</span></h3>
+        <div class="home-body">
+            <div class="chat-list">
+                {% for request in requests %}
+                    <div class="contact-card">
+                        <h4>Demande d'ajout de {{ request.friend.login }} <span class="count">1</span> </h4>
+                        <small>Le {{ request.requestedAt|date("d-m-Y") }}</small>
+                        <span class="contact-card__choice"><a href="{{path('contact-befriend', {id:request.friend.id})}}"><i class="fas fa-check"></i></a><a href="{{path('contact-unfriend', {id:request.friend.id})}}"><i class="fas fa-times"></i></a></span>
+                    </div>
+                {% else %}
+                    <div class="empty-display">Aucune nouvelle demande d'amis</div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+</div>
+<template id="notifications-template">
+     
+    <div class="contact-card" id="">
+        <h4>Chat avec <span class="user-login"></span><span class="count">1</span> </h4>
+                   
+        <p><a href="">Aller sur le chat</a></p>
+    </div>
+
+  
+ </template>
+
+{% endblock %}
