@@ -42,7 +42,9 @@ const profile = {
         let src = document.querySelector('.form__image--picture').src;
         let srcArr= src.split('/');
         let newSrc = srcArr[srcArr.length-1];
-        document.querySelector('.form__image--picture').src = src.replace(newSrc, 'avatar-male-1.png');
+        document.querySelector('.form__image--picture').src = src.replace(newSrc, 'images/avatar-male-1.png');
+      
+        document.querySelector('.form__image--picture').src.startsWith('blob') ? document.querySelector('.form__image--picture').src = document.querySelector('.form__image--picture').src.replace('blob:', '') :'';
         document.querySelector('.avatar-input').value='avatar-male-1.png';
         profile.checkEditMode();
     },
