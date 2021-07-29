@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}S'inscrire{% endblock %}
+
+{% block body %}
+<main>
+            {% for flashError in app.flashes('verify_email_error') %}
+                <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+            {% endfor %}
+            <div class="form-container form-container--create ">
+               {{ form_start(registrationForm, {'attr':{'novalidate':'novalidate', 'class':'form'}}) }}
+                    <header>
+                        <h2 class="form__title"><i class="fas fa-user-plus"></i> Créer un compte</h2>
+                    </header>
+                    <section class="form__body">
+                        <article>
+                            <fieldset>
+                                <i class="far fa-envelope"></i>{{ form_widget(registrationForm.email, {'attr':{'placeholder':'Email'}}) }}
+                            </fieldset>    
+                            <div class="form-error">
+                                    {{ form_errors(registrationForm.email) }}
+                            </div>
+                        </article>
+                        <article>   
+                            <fieldset>
+                                <i class="fas fa-user"></i>{{ form_widget(registrationForm.login, {'attr':{'placeholder':'Votre nom d\'utilisateur'}}) }}
+                            </fieldset>    
+                            <div class="form-error">
+                                    {{ form_errors(registrationForm.login) }}
+                            </div>
+                        </article>
+                        <article>    
+                            <fieldset>
+                                <i class="fas fa-user"></i> {{ form_widget(registrationForm.firstname, {'attr':{'placeholder':'Votre prénom'}}) }}
+                            </fieldset>    
+                            <div class="form-error">
+                                    {{ form_errors(registrationForm.firstname) }}
+                            </div>
+                        </article>
+                        <article>   
+                            <fieldset>
+                                <i class="fas fa-user"></i>{{ form_widget(registrationForm.lastname, {'attr':{'placeholder':'Votre nom'}}) }}
+                            </fieldset>     
+                            <div class="form-error">
+                                    {{ form_errors(registrationForm.lastname) }}
+                                </div>
+                        </article>
+                        <article>   
+                        <fieldset>
+                            <i class="fas fa-calendar-alt"></i>{{ form_widget(registrationForm.birthdate, {'attr':{'placeholder':'Votre date de naissance'}}) }}
+                            </fieldset>
+                            <div class="form-error">
+                                    {{ form_errors(registrationForm.birthdate) }}
+                            </div>
+                        </article>
+                        <article>   
+                            <fieldset>
+                                <i class="fas fa-key"></i>{{ form_widget(registrationForm.plainPassword.first, {'attr':{'placeholder':'Votre mot de passe'}}) }} 
+                            </fieldset> 
+                        </article> 
+                        <article> 
+                            <fieldset>
+                                <i class="fas fa-key"></i>{{ form_widget(registrationForm.plainPassword.second, {'attr':{'placeholder':'Répetez votre mot de passe'}}) }} 
+                            </fieldset>   
+                            <div class="form-error">
+                                    {{ form_errors(registrationForm.plainPassword.first) }}
+                            </div> 
+                        </article>          
+                        <article>
+                            <button class="btn submit">S'inscrire</button>
+                            {{ form_end(registrationForm) }}
+                            <small>Vous avez déjà un compte ?<a href="{{path('app_login')}}"> Connectez-vous !</a></small>
+                        </article> 
+                    </section>  
+            </div>
+</main>
+
+
+{% endblock %}
