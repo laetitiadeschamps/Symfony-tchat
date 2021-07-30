@@ -26,6 +26,7 @@ const chat = {
                 let displayMinutes = date.getMinutes() >9 ? date.getMinutes() : '0'+date.getMinutes();
                 messageFragment.querySelector('.chat-message__time').textContent =  displayDay+'/'+displayMonth+' ' + displayHours+':'+ displayMinutes;
                 messageFragment.querySelector('.chat-message__body').classList.add (data.author_id == document.querySelector('#userId').value ? 'isAuthor' : 'isNotAuthor');
+                messageFragment.querySelector('.chat-message').classList.add (data.author_id == document.querySelector('#userId').value ? 'isAuthor' : 'isNotAuthor');
                 messageFragment.querySelector('.chat-message__body').innerHTML = data.message;
                 list.prepend(messageFragment);
 

@@ -29,7 +29,7 @@
     <div class="chat-messages">
        
        {% for message in chat.messages|sort((a, b)=> b.createdAt <=> a.createdAt) %}
-          <div class="chat-message">
+          <div class="chat-message {{message.author.id == app.user.id ? 'isAuthor' : 'isNotAuthor'}}">
               <span class="chat-message__infos">
                   <span class="chat-message__author"> {{message.author.login }}</span>
                   <span class="chat-message__time"> {{message.createdAt|date('d/m H:i')}}</span> 

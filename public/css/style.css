@@ -793,6 +793,9 @@ input[type=date]::-webkit-calendar-picker-indicator {
   display: inline-block;
   text-align: center;
 }
+.ql-toolbar.ql-snow {
+  background-color: #dfe6ff;
+}
 .chat-new-message {
   margin:.5em 0;
 }
@@ -835,8 +838,12 @@ input[type=date]::-webkit-calendar-picker-indicator {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
 }
+.chat-message.isAuthor {
+  align-items: flex-end;
+}
+
 .chat-message span {
   display: inline-block; 
 }
@@ -857,7 +864,9 @@ input[type=date]::-webkit-calendar-picker-indicator {
   padding:0.5em 1em;
   margin:.5em;
   border-radius: 10px;
+  font-weight: normal;
 }
+
 .isAuthor.chat-message__body.bubble:after {
   border-color: transparent #ff9800 transparent transparent;
 }
@@ -986,7 +995,7 @@ input[type=date]::-webkit-calendar-picker-indicator {
     display: inline;
   }
   .chat-messages {
-    width:70%;
+    width:100%;
     margin:0 auto;
   }
   .contact-list {
