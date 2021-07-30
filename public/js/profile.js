@@ -21,8 +21,9 @@ const profile = {
 
         if(profileElement.classList.contains('editMode')) {
            // If the picture selected is an avatar, we display arrows to change avatar
-            if(document.querySelector('.avatar-input').value) {   
-
+          console.log(document.querySelector('.avatar-input').value == '');
+            if(document.querySelector('.avatar-input').value == '') {   
+               
                 document.querySelectorAll('.avatarSelect').forEach(arrow=> {
                     arrow.style.display='block';
                     arrow.addEventListener('click', profile.handleNextAvatar);
@@ -42,7 +43,7 @@ const profile = {
         let src = document.querySelector('.form__image--picture').src;
         let srcArr= src.split('/');
         let newSrc = srcArr[srcArr.length-1];
-        document.querySelector('.form__image--picture').src = src.replace(newSrc, 'images/avatar-male-1.png');
+        document.querySelector('.form__image--picture').src = src.replace(newSrc, 'avatar-male-1.png');
       
         document.querySelector('.form__image--picture').src.startsWith('blob') ? document.querySelector('.form__image--picture').src = document.querySelector('.form__image--picture').src.replace('blob:', '') :'';
         document.querySelector('.avatar-input').value='avatar-male-1.png';
