@@ -17,16 +17,26 @@ class MainController extends AbstractController
      */
     public function home(Security $security, FriendshipRepository $friendshipRepository, MessageRepository $messageRepository, ChatRepository $chatRepository): Response
     {
-        /** @var User */
-        $user = $security->getUser();
-        $requests = $friendshipRepository->getFriendshipRequests($user);
-    
-        
-     
+       /** @var User */
+       $user = $security->getUser();
+       $requests = $friendshipRepository->getFriendshipRequests($user);
        
-        
-        return $this->render('main/home.html.twig', [
-            'requests'=>$requests
-        ]);
+       $notifications = $messageRepository->findUnreadCount($user);
+       $count = 0;
+       $chatNotifications=[];
+       if($notifications) {
+           foreach($notifications as $notification) {
+               $count+= $notification['sumMessages'];
+              $chatNotifications[$notification['chatId']]['sum']= $notification['sumMessages'];
+              $chatNotifications[$notification['chatId']]['chat']=$chatRepository->find($notification['chatId']);
+           }
+       } 
+       
+       return $this->render('main/home.html.twig', [
+           'requests'=>$requests,
+           'notifications'=>$chatNotifications,
+           'count'=>$count
+
+       ]);
     }
 }

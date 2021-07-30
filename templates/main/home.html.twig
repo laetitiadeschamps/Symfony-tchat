@@ -5,10 +5,23 @@
 {% block body %}
 <div class="list-container list-container--home">
     <section>
-        <h3 class="home-title"><i class="far fa-bell"></i> Mes notifications <span class="count"> count </span></h3>
+        <h3 class="home-title"><i class="far fa-bell"></i> Mes notifications <span class="count">{{ count }}</span></h3>
         <div class="home-body">
             <div class="chat-list">
-               
+                {% for notification in notifications|sort((a, b)=> b.chat.updatedAt <=> a.chat.updatedAt) %}
+                    {% set contactObject = null %}
+                    {% for contact in notification.chat.users|filter(user => user != app.user) %}
+                        {% set contactObject = contact %}
+                    {% endfor %}
+                    <div class="contact-card" id="<?php $chat['chat']->id?>">
+                        <h4>Chat avec {{contactObject.login }} <span class="count">{{ notification.sum }}</span> </h4>
+                        <p>
+                            <a href="{{path('chat-getChat', {id:notification.chat.id})}}">Aller sur le chat</a>
+                        </p>
+                    </div>
+                {% else %}
+                     <div class="empty-display">Aucune nouvelle notification</div>
+                {% endfor %}
             </div>
         </div>
     </section>
