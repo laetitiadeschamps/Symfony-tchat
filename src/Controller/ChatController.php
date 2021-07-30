@@ -41,4 +41,20 @@ class ChatController extends AbstractController
         ]);
         
     }
+     /**
+     * @Route("/{id}/markAsRead", name="markAsRead")
+     */
+    public function markAsRead(Chat $chat, Security $security, ChatRepository $chatRepository, EntityManagerInterface $em): Response
+    {
+        $this->denyAccessUnlessGranted('edit', $chat);
+        // When we receive a message while we are on the tchat, we mark it as read along with all other tchat messages
+        foreach($chat->getMessages() as $message) {
+            if($message->getAuthor() != $security->getUser()) {
+                $message->setIsRead(true);
+            }
+        }
+        $em->flush();
+        return $this->json('ok', 200);
+        
+    }
 }

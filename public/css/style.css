@@ -895,7 +895,7 @@ input[type=date]::-webkit-calendar-picker-indicator {
   position: relative;
   background: white;
   color: black;
-  font-family: Impact;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 .bubble:after {
   content: '';
