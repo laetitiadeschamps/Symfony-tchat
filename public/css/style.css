@@ -533,7 +533,6 @@ input[type=date]::-webkit-calendar-picker-indicator {
 }
 .contact-card i {
   padding: 0 .5em;
-  font-size: 1.2em;
   color:#9c0505;
 }
 .contact-card h4 {
@@ -1006,10 +1005,9 @@ input[type=date]::-webkit-calendar-picker-indicator {
   }
   .contact-card__body .contact-card__actions{
     display: flex;
+    font-size: 0.9em;
+    margin:0 0.5em;
     align-items: center;
-  }
-  .contact .contact-card__actions a {
-    padding:0;
   }
   .tooltip-inner {
     padding: 1em;

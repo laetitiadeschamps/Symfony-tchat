@@ -100,10 +100,23 @@ class ContactController extends AbstractController
          $friendship[0]->setStatus(1);
          $friendship = $friendshipRepository->findBy(['user'=>$contact, 'friend'=>$user]);
          $friendship[0]->setStatus(1);
-         $chat = new Chat();
-         $user->addChat($chat);
-         $contact->addChat($chat);
-         $em->persist($chat);
+         // if no chat exists between both users, create one
+         $hasChat = false;
+         /** @var Array $chats */
+         $chats = $user->getChats();
+         foreach($chats as $chat) {
+             if(in_array($contact, $chat->getUsers())) {
+                 $hasChat = true;
+             }
+         }
+
+         if(!$hasChat) {
+            $chat = new Chat();
+            $user->addChat($chat);
+            $contact->addChat($chat);
+            $em->persist($chat);
+         }
+         
          $em->flush();  
          $this->addFlash(
             'info',

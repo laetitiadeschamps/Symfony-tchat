@@ -22,12 +22,12 @@
             <div class="contact-card">
             <div class="contact-card__picture"><img src="{{asset('images/'~ contact.user.picture )}}" alt="contact-picure"></div> 
             <div class="contact-card__body">
-                <p>
+              
                         <a href="{{path('contact-profile',{id:contact.user.id})}}"><span> {{ contact.user.firstname }} {{ contact.user.lastname }} </span></a>
                         <div class="contact-card__actions">
-                            <a class="tooltip-outer" href="{{path('chat-getChat', {id:chatId})}}"> <i class="fas fa-comments"></i><span class="tooltip-inner">Accéder au chat</span> </a><a class="tooltip-outer" href="{{path('contact-unfriend', {id:contact.user.id})}}"><i class="fas fa-user-slash unfriend"></i><span class="tooltip-inner">Supprimer de la liste des amis</span></a>
+                            <a  href="{{path('chat-getChat', {id:chatId})}}"> <i class="fas fa-comments"></i></a><a href="{{path('contact-unfriend', {id:contact.user.id})}}"><i class="fas fa-user-slash unfriend"></i></a>
                         </div>
-                    </p>
+                 
                 </div>
             </div>
               
