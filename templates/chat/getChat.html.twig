@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chat {% endblock %}
+
+
+{% block body %}
+{% set contactObject = null %}
+{% for contact in chat.users|filter(user => user != app.user) %}
+{% set contactObject = contact %}
+{% endfor %}
+
+<div class="list-container list-container--chat">
+ 
+    <input type="hidden" id="userId" name="userId" value={{app.user.id}}>
+    <h3 class="chat-title"><img src="{{asset('images/'~ contactObject.picture )}}" alt="contact-picture"> <img src="{{asset('images/'~ app.user.picture )}}" alt="profile-picture"> <span class="chat-title__text">Conversation avec {{contactObject.login }} </span></h3>
+    
+    <div class="chat-new-message">
+        <h3 class="new-message__title">Nouveau message</h3>
+        <form id="newPostForm" class="new-message__form" action="" method="POST">
+            <div name="newPost" class="editor"></div>
+            <div id="toolbar"></div>
+            <input type="hidden" name="newPostMessage" id="newPostMessage" value=""/>
+            <input type="hidden" name="chatId" id="chatId" value="{{ chat.id }}"/>
+            <input type="hidden" name="authorId" id="authorId" value="{{ app.user.id}}"/>
+            <input type="hidden" name="authorName" id="authorName" value="{{ app.user.login}}"/>
+            <input type="submit" class="btn submit" value="Envoyer">
+        </form>
+    </div>
+    <div class="chat-messages">
+       
+       {% for message in chat.messages|sort((a, b)=> b.createdAt <=> a.createdAt) %}
+          <div class="chat-message">
+              <span class="chat-message__infos">
+                  <span class="chat-message__author"> {{message.author.login }}</span>
+                  <span class="chat-message__time"> {{message.createdAt|date('d/m H:i')}}</span> 
+              </span>
+              <span class="bubble chat-message__body {{message.author.id == app.user.id ? 'isAuthor' : 'isNotAuthor'}}" style="white-space:pre-wrap"> {{message.message|raw}} </span>
+          </div>
+        {% else %}
+         <div class="empty-display">Aucun message avec cette personne pour le moment</div>
+       {% endfor %}
+    </div>
+ 
+</div>
+
+<template id="message-template">
+
+    <div class="chat-message">
+        <span class="chat-message__infos">
+            <span class="chat-message__author"></span> 
+            <span class="chat-message__time"></span> 
+        </span>
+        <span class="bubble chat-message__body"></span>
+    </div>
+</template>
+
+
+{% endblock %}
