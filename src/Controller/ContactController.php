@@ -51,8 +51,12 @@ class ContactController extends AbstractController
         $contactsPendingApproval = [];
         // for every friend, we check relationship status, and insert it in the matching array
         foreach($contacts as $contact) {
+            
             if($contact->getStatus()==0) {
-                $contactsPendingApproval[]=$contact;
+                if($contact->getRequester() !== $user) {
+                    $contactsPendingApproval[]=$contact;
+                }
+                
             }else {
                 $friends[]=$contact;
             }
