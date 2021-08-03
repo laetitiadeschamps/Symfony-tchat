@@ -26,5 +26,6 @@ Dans une V2 je voudrais :
 Optimiser les websockets afin de dynamiser les notifications
 Ajouter une possibilité de messages temporaires comme sur Snapchat
 Gérer les messages groupés. J'ai créé ma BDD pour qu'elle soit adaptable pour les messages de plus de deux participants)
-Démo à venir !
+Démo : https://user-images.githubusercontent.com/74212211/128066077-0f3ce0e2-3c20-4495-992b-3311f7e4c5cd.mp4
+
 ## Enjoy!
