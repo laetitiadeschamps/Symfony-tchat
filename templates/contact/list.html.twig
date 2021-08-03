@@ -44,9 +44,11 @@
                     <div class="contact-card__picture"><img src="{{asset('images/'~ contact.user.picture )}}" alt="contact-picure"></div> 
                     <div class="contact-card__body">
                             <a href="{{path('contact-profile',{id:contact.user.id})}}"><span> {{ contact.user.firstname }} {{ contact.user.lastname }} </span></a>
+                         
                             <div class="contact-card__actions">
                                 <span class="contact-card__choice"><a href="{{path('contact-befriend', {id:contact.user.id})}}"><i class="fas fa-check"></i></a><a href="{{path('contact-unfriend', {id:contact.user.id})}}"><i class="fas fa-times"></i></a></span>
                             </div>   
+                           
                     </div>
                 </div>
               
