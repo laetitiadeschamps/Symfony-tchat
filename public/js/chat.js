@@ -87,7 +87,7 @@ const chat = {
             body : JSON.stringify({message:document.querySelector('#newPostMessage').value})
         }
        
-        let request = fetch(app.baseUrl+'message/add/chat/'+chatId, config);
+        let request = fetch(app.baseUrl+'chat/'+chatId+'/message/add', config);
         request.then(response=> { 
             if (!response.ok) {
                 throw Error(response.statusText);
@@ -106,6 +106,7 @@ const chat = {
             app.socket.send(JSON.stringify(data));
         })
         .catch(error=> {
+            console.log(error);
             const list = document.querySelector('.chat-messages');
             let errorMsg = document.createElement('div');
             errorMsg.textContent = "Il y a eu une erreur, veuillez réessayer";

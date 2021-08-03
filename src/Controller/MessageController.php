@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Chat;
+use App\Entity\User;
 use App\Entity\Message;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 
 /**
-* @Route("/message", name="message-", requirements={"id":"\d+"})
+* @Route("/chat/{id}/message", name="message-", requirements={"id":"\d+"})
 */
 class MessageController extends AbstractController
 {
@@ -26,16 +27,16 @@ class MessageController extends AbstractController
         $this->em = $em;
     }
     /**
-     * @Route("/add/chat/{id}", name="add", methods={"GET"})
+     * @Route("/add", name="add", methods={"POST"})
      * @param Chat
      * @return Response
      */
     public function add(Chat $chat, Request $request): Response
     {
-        /** @var \App\Entity\User */
+        /** @var User */
         $user=$this->security->getUser();
         $this->denyAccessUnlessGranted('edit', $chat);
-        $data = json_decode($this->request->getContent(), true);
+        $data = json_decode($request->getContent(), true);
         $messageBody = $data['message'];
         $message = new Message();
         $message->setMessage($messageBody);
