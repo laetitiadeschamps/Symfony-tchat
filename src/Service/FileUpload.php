@@ -17,13 +17,17 @@ class FileUpload
         $this->slugger = $slugger;
     }
 
+    /** Method to upload a file
+    * @param UploadedFile
+    * @param string
+    * @return string or null
+    */
     public function upload(UploadedFile $file, $targetDirectory =null)
     {
         $this->targetDirectory=$targetDirectory ?? $_ENV['UPLOAD_FOLDER'];
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $safeFilename = $this->slugger->slug($originalFilename);
         $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
-
         try {
             $file->move($this->getTargetDirectory(), $fileName);
             return $fileName;
@@ -31,7 +35,6 @@ class FileUpload
             return $e;
         }
         return null;
-
         
     }
 

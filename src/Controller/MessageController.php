@@ -17,26 +17,33 @@ use Symfony\Component\Security\Core\Security;
 */
 class MessageController extends AbstractController
 {
+    private $security;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, Security $security)
+    {
+        $this->security=$security;
+        $this->em = $em;
+    }
     /**
-     * @Route("/add/chat/{id}", name="add")
+     * @Route("/add/chat/{id}", name="add", methods={"GET"})
+     * @param Chat
+     * @return Response
      */
-    public function add(Request $request, Chat $chat, EntityManagerInterface $em, Security $security): Response
+    public function add(Chat $chat, Request $request): Response
     {
         /** @var \App\Entity\User */
-        $user=$security->getUser();
-        
+        $user=$this->security->getUser();
         $this->denyAccessUnlessGranted('edit', $chat);
-        $data = json_decode($request->getContent(), true);
+        $data = json_decode($this->request->getContent(), true);
         $messageBody = $data['message'];
         $message = new Message();
         $message->setMessage($messageBody);
         $message->setAuthor($user);
         $message->setChat($chat);
         $chat->setUpdatedAt(new DateTime());
-        $em->persist($message);
-        $em->flush();
-
-
+        $this->em->persist($message);
+        $this->em->flush();
         return $this->json("Message envoyé", 201);
     }
 }

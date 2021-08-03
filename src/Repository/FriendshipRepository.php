@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Friendship;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,43 +20,17 @@ class FriendshipRepository extends ServiceEntityRepository
         parent::__construct($registry, Friendship::class);
     }
 
-    public function getFriendshipRequests($user) {
-        // Instanciating query builder
+    /** Method to get all friendship requests (frindships with status 0) for one user 
+    * @param User
+    * @return Frienship[]
+    */
+    public function getFriendshipRequests(User $user) {
         $id=$user->getId();
         $qb = $this->createQueryBuilder('friendship')->join('friendship.user', 'user')->join('friendship.friend', 'friend')->addSelect('user', 'friend')
         ->where('friendship.user = :user')->andWhere('friendship.status = 0')->andWhere('friendship.requester != :user')->setParameter(':user', "$id");
-
         $query = $qb->getQuery();
-      
         return $query->getResult();
     }
    
-    // /**
-    //  * @return Chat[] Returns an array of Chat objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Chat
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+   
 }

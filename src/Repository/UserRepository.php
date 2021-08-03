@@ -30,70 +30,22 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         if (!$user instanceof User) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
         }
-
         $user->setPassword($newHashedPassword);
         $this->_em->persist($user);
         $this->_em->flush();
     }
 
-     /**
+    /**
      * Method to find all users that contain a specific string
      * @param string
      * @return Collection|Users[]
      */
-    public function findWithString($string) {
-
-     
-        // Instanciating query builder
+    public function findWithString(string $string) {
         $qb = $this->createQueryBuilder('user'); 
-
         $qb->where('user.login LIKE :search')->orWhere('user.firstname LIKE :search')->orWhere('user.firstname LIKE :search')->setParameter(':search', "%$string%");
-
         $query = $qb->getQuery();
-       
         return $query->getArrayResult();
     }
-    public function getActiveChats($user) {
-        $id = $user->getId();
-          $qb = $this->createQueryBuilder('user')->join('user.chats', 'users')->addSelect('users')->where('user = :user')->setParameter(':user', "$id");
-          
-          $query = $qb->getQuery();
-        
-          dd($query->getResult());
-          return $query->getResult();
-      }
-  
-  
-
     
-     
-
-    // /**
-    //  * @return User[] Returns an array of User objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?User
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+  
 }

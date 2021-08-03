@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Controller;
-
 use App\Entity\Chat;
 use App\Entity\Friendship;
 use App\Entity\User;
@@ -22,65 +20,85 @@ use Symfony\Component\Security\Http\RememberMe\ResponseListener;
 */
 class ContactController extends AbstractController
 {
-     /**
-     * @Route("/list", name="list")
-     */
-    public function list(Request $request, Security $security, UserRepository $userRepository): Response
-    {
-        /** @var User */
-        $user = $security->getUser();
+    private $security;
+    private $userRepository;
+    private $em;
 
+    public function __construct(Security $security, UserRepository $userRepository, EntityManagerInterface $em, FriendshipRepository $friendshipRepository)
+    {
+        $this->security = $security;
+        $this->userRepository = $userRepository;
+        $this->em = $em;
+        $this->friendshipRepository = $friendshipRepository;
+    }
+     /**
+     * @Route("/list", name="list", methods={"GET"})
+     * @param void
+     * @return Response
+     */
+    public function list(): Response
+    {
+        // We retrieve the current user and get his friends
+        /** @var User */
+        $user = $this->security->getUser();
         /** @var Friendship */
         $contacts = $user->getFriendsWithMe();
+        //We create two arrays to hold friends and friendship requests awaiting approval from either user
         $friends = [];
         $contactsPendingApproval = [];
-
+        // for every friend, we check relationship status, and insert it in the matching array
         foreach($contacts as $contact) {
-          if($contact->getStatus()==0) {
+            if($contact->getStatus()==0) {
                 $contactsPendingApproval[]=$contact;
-          }else {
+            }else {
                 $friends[]=$contact;
-          }
+            }
         }
-       
-       
         return $this->render('contact/list.html.twig', [
             'friends'=>$friends,
             'contactsPendingApproval'=> $contactsPendingApproval
         ]);
     }
     /**
-     * @Route("/profile/{id}", name="profile")
+     * @Route("/profile/{id}", name="profile", methods={"GET"})
+     * @param integer
+     * @return Response
      */
-    public function profile(int $id, UserRepository $userRepository, Security $security): Response
+    public function profile(int $id): Response
     {
-        $contact=$userRepository->find($id);
-
+        /** @var User */
+        $contact=$this->userRepository->find($id);
         return $this->render('contact/profile.html.twig', [
             'contact' => $contact
         ]);
     }
     /**
+     * Route called upon requesting friendship with a user
      * @Route("/requestBefriend/{id}", name="requestBefriend")
+     * @param integer
+     * @return Response
      */
-    public function requestBefriend(int $id, UserRepository $userRepository, Security $security, EntityManagerInterface $entityManager): Response
+    public function requestBefriend(int $id): Response
     {
-         $contact=$userRepository->find($id);
+        /** @var User $contact */
+        $contact=$this->userRepository->find($id);
         /** @var User $user */
-         $user=$security->getUser();
+        $user=$this->security->getUser();
+
+        // we create two new Friendship entries with status 0, while it hasn't been accepted by the other party
         $friendship = new Friendship();
         $friendship->setUser($contact);
         $friendship->setFriend($user);
         $friendship->setRequester($user);
-        $entityManager->persist($friendship);
+        $this->em->persist($friendship);
 
         $friendship2 = new Friendship();
         $friendship2->setUser($user);
         $friendship2->setFriend($contact);
         $friendship2->setRequester($user);
-        $entityManager->persist($friendship2);
+        $this->em->persist($friendship2);
 
-        $entityManager->flush();
+        $this->em->flush();
         $this->addFlash(
             'info',
             'La demande d\'ajout a bien été envoyée!'
@@ -88,36 +106,40 @@ class ContactController extends AbstractController
         return $this->redirectToRoute('contact-profile', ['id'=> $contact->getId()]);
     }
     /**
-     * @Route("/befriend/{id}", name="befriend", methods={"GET"})
+     * Route called when someone approves a friendship request, it creates a chat between both users if there is none
+     * @Route("/befriend/{id}", name="befriend")
+     * @param integer
+     * @return Response
      */
-    public function befriend(int $id, UserRepository $userRepository, Security $security, EntityManagerInterface $em, FriendshipRepository $friendshipRepository): Response
+    public function befriend(int $id): Response
     {
-         $contact=$userRepository->find($id);
+        /** @var User $contact */
+        $contact=$this->userRepository->find($id);
         /** @var User  */
-         $user=$security->getUser();
+        $user=$this->security->getUser();
 
-         $friendship = $friendshipRepository->findBy(['user'=>$user, 'friend'=>$contact]);
-         $friendship[0]->setStatus(1);
-         $friendship = $friendshipRepository->findBy(['user'=>$contact, 'friend'=>$user]);
-         $friendship[0]->setStatus(1);
-         // if no chat exists between both users, create one
-         $hasChat = false;
-         /** @var Array $chats */
-         $chats = $user->getChats();
-         foreach($chats as $chat) {
-             if(in_array($contact, $chat->getUsers())) {
-                 $hasChat = true;
-             }
-         }
-
+        // We set the status of the Friendship entries for both users to 1.
+        $friendship = $this->friendshipRepository->findBy(['user'=>$user, 'friend'=>$contact]);
+        $friendship[0]->setStatus(1);
+        $friendship = $this->friendshipRepository->findBy(['user'=>$contact, 'friend'=>$user]);
+        $friendship[0]->setStatus(1);
+        // if no chat exists between both users, create one
+        $hasChat = false;
+        /** @var Array $chats */
+        $chats = $user->getChats();
+        foreach($chats as $chat) {
+            if(in_array($contact, $chat->getUsers())) {
+                $hasChat = true;
+            }
+        }
          if(!$hasChat) {
             $chat = new Chat();
             $user->addChat($chat);
             $contact->addChat($chat);
-            $em->persist($chat);
-         }
+            $this->em->persist($chat);
+        }
          
-         $em->flush();  
+         $this->em->flush();  
          $this->addFlash(
             'info',
             'La liste des contacts a été mise à jour'
@@ -125,32 +147,38 @@ class ContactController extends AbstractController
         return $this->redirectToRoute('main-home');
     }
     /**
-     * @Route("/unfriend/{id}", name="unfriend", methods={"GET"})
+     * Route called when someone rejects a friend request or unfriends someone
+     * @Route("/unfriend/{id}", name="unfriend")
+     * @param integer
+     * @return Response
      */
-    public function unfriend(int $id, Request $request, UserRepository $userRepository, Security $security, EntityManagerInterface $em, FriendshipRepository $friendshipRepository): Response
+    public function unfriend(int $id, Request $request): Response
     {
-         $contact=$userRepository->find($id);
+        /** @var User $contact  */
+        $contact=$this->userRepository->find($id);
         /** @var User $user  */
-         $user=$security->getUser();
-         $friendship = $friendshipRepository->findBy(['user'=>$user, 'friend'=>$contact]);
-         $em->remove($friendship[0]);
-         $friendship = $friendshipRepository->findBy(['user'=>$contact, 'friend'=>$user]);
-         $em->remove($friendship[0]);
-         $em->flush();  
-         $this->addFlash(
+        $user=$this->security->getUser();
+        $friendship = $this->friendshipRepository->findBy(['user'=>$user, 'friend'=>$contact]);
+        $this->em->remove($friendship[0]);
+        $friendship = $this->friendshipRepository->findBy(['user'=>$contact, 'friend'=>$user]);
+        $this->em->remove($friendship[0]);
+        $this->em->flush();  
+        $this->addFlash(
             'info',
             $contact->getLogin().' ne fait plus partie de vos amis'
         );
         return new RedirectResponse($request->headers->get('referer'));
     }
     /**
+     * Route called by AJAX to search from the user database with a string input
      * @Route("/search/{string}", name="search", requirements={"string"="\w+"})
+     * @param string
+     * @return Response
      */
-    public function search($string, UserRepository $userRepository): Response
+    public function search(string $string): Response
     {
-        $users = $userRepository->findWithString($string);
+        $users = $this->userRepository->findWithString($string);
         $response = new JsonResponse($users);
         return $response;
-
     }
 }
