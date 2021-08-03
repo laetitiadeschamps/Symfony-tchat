@@ -34,6 +34,24 @@ class ChatRepository extends ServiceEntityRepository
         $query = $qb->getQuery();
         return $query->getResult();
     }
-    
+    /**
+     * method to get the chat of 2 users
+     *
+     * @param integer $userId
+     * @param integer $contactId
+     * @return Chat
+     */
+    public function getChatIdFromUsers(int $userId, int $contactId): ?Chat
+    {
+
+        return $this->createQueryBuilder('chat')
+            ->join('chat.users', 'users')
+            ->where(':userId MEMBER OF chat.users')
+            ->andWhere(':contactId MEMBER OF chat.users')
+            ->setParameter(':userId', $userId)
+            ->setParameter(':contactId', $contactId)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 
 }

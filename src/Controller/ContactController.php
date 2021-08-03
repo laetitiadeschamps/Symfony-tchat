@@ -3,6 +3,7 @@ namespace App\Controller;
 use App\Entity\Chat;
 use App\Entity\Friendship;
 use App\Entity\User;
+use App\Repository\ChatRepository;
 use App\Repository\FriendshipRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,13 +24,15 @@ class ContactController extends AbstractController
     private $security;
     private $userRepository;
     private $em;
+    private $chatRepository;
 
-    public function __construct(Security $security, UserRepository $userRepository, EntityManagerInterface $em, FriendshipRepository $friendshipRepository)
+    public function __construct(Security $security, UserRepository $userRepository, EntityManagerInterface $em, FriendshipRepository $friendshipRepository, ChatRepository $chatRepository)
     {
         $this->security = $security;
         $this->userRepository = $userRepository;
         $this->em = $em;
         $this->friendshipRepository = $friendshipRepository;
+        $this->chatRepository = $chatRepository;
     }
      /**
      * @Route("/list", name="list", methods={"GET"})
@@ -123,16 +126,10 @@ class ContactController extends AbstractController
         $friendship[0]->setStatus(1);
         $friendship = $this->friendshipRepository->findBy(['user'=>$contact, 'friend'=>$user]);
         $friendship[0]->setStatus(1);
+        
         // if no chat exists between both users, create one
-        $hasChat = false;
-        /** @var Array $chats */
-        $chats = $user->getChats();
-        foreach($chats as $chat) {
-            if(in_array($contact, $chat->getUsers())) {
-                $hasChat = true;
-            }
-        }
-         if(!$hasChat) {
+        $chatId = $this->chatRepository->getChatIdFromUsers($user->getId(), $contact->getId());
+         if(!$chatId) {
             $chat = new Chat();
             $user->addChat($chat);
             $contact->addChat($chat);

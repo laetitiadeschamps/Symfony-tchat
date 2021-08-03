@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Repository\ChatRepository;
 use App\Repository\FriendshipRepository;
 use App\Repository\MessageRepository;

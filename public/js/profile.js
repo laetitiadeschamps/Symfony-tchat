@@ -22,7 +22,7 @@ const profile = {
         if(profileElement.classList.contains('editMode')) {
            // If the picture selected is an avatar, we display arrows to change avatar
           console.log(document.querySelector('.avatar-input').value == '');
-            if(document.querySelector('.avatar-input').value == '') {   
+            if(document.querySelector('.avatar-input').value !== '') {   
                
                 document.querySelectorAll('.avatarSelect').forEach(arrow=> {
                     arrow.style.display='block';

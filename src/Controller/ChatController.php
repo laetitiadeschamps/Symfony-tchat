@@ -73,4 +73,24 @@ class ChatController extends AbstractController
         return $this->json('ok', 200);
         
     }
+     /**
+     * @Route("/delete/{id}", name="delete")
+     * @param Chat
+     * @return Response
+     */
+    public function delete(Chat $chat): Response
+    {
+        $this->denyAccessUnlessGranted('edit', $chat);   
+        // We delete all messages from a single chat
+        foreach($chat->getMessages() as $message) {
+           $this->em->remove($message);
+        }
+        $this->em->flush();
+        $this->addFlash(
+            'info',
+            'La conversation a bien été supprimée!'
+        );
+        return $this->redirectToRoute('chat-list');
+        
+    }
 }
