@@ -1,11 +1,11 @@
 /* General */
 html {
-  --color-1:#041052;
-  --color-shadow:#8a8686;
-  --color-font-light:#fff;
+  --color-1:#eeeeee;
+  --color-shadow:#926f05;
+  --color-font-light:rgb(34, 31, 31);
   --color-bg-containers:white;
-  --color-secondary:#5f298b;
-  --color-error:red;
+  --color-secondary:#ffc107;
+  --color-error:#cc1b0d;
   --color-divider:gray;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
@@ -144,18 +144,19 @@ i.hidden, .hidden {
 
 header.main-header {
   background-color: black;
+  color: var(--color-1);
 }
 nav {
   padding:1em;
   display: flex;
 }
+
 nav .logo a {
   width:50%;
 }
 nav .logo h1 {
-  font-size: 1.6em;
   font-style: italic;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Roboto', sans-serif; 
 }
 nav .logo {
   display: flex;
@@ -168,7 +169,6 @@ nav #hamburger-nav {
   position: fixed;
   left:0;
   right:0;
-  color:white;
   z-index:100;
   padding:1em;
   display: none;
@@ -181,7 +181,6 @@ nav #hamburger-nav ul {
   align-items: center;
   justify-content: space-around;
   font-size: 1.2em;
-  color: gray;
   width: 100%;
  
 }
@@ -191,7 +190,7 @@ nav #hamburger-nav.open {
 }
 nav ul li, nav ul button {
   padding:1em;
-  color:var(--color-font-light);
+  color: var(--color-1);
   font-size: 1.8rem;
 }
 nav ul li:not(.logo):hover, nav ul button:hover {
@@ -330,7 +329,7 @@ nav ul li:not(.logo):hover, nav ul button:hover {
     outline: none;
     position: relative;
     transition: all 0.3s;
-    background-color:#30344a;
+    background-color:var(--color-secondary);
     color: var(--color-font-light);
     box-shadow: 0 6px var(--color-shadow);
     transition: none;
@@ -425,6 +424,7 @@ input[type=date]::-webkit-calendar-picker-indicator {
   padding:1em;
 }
 .list-search {
+  color: var(--color-1);
   position: relative;
   width:95%;
   max-width: 500px;
@@ -438,7 +438,6 @@ input[type=date]::-webkit-calendar-picker-indicator {
   background-color: transparent;
   font-size: 1.2em;
   margin-left:.5em;
-  color:var(--color-font-light);
 }
 
 .list-search__searchbar {
@@ -473,7 +472,7 @@ input[type=date]::-webkit-calendar-picker-indicator {
   align-items: center;
   justify-content: flex-start;
   padding:1em;
-  color:var(--color-font-light);
+  color:var(--color-1);
   background-color: black;
 }
 .list-search__users-list .user-card:last-child {
@@ -497,14 +496,12 @@ input[type=date]::-webkit-calendar-picker-indicator {
   max-width:800px;
   margin:1em auto;
   padding:0.5em;
-  border-radius: 5px;
-  border:1px solid var(--color-font-light);
+  border-bottom:1px solid var(--color-divider);
   color: var(--color-font-light);
-  font-size: 1.2em;  
 }
 .list-container--conversations .contact-card__picture {
-  width:8em;
-  height:8em;
+  width:5em;
+  height:5em;
 }
 .list-container--conversations .contact-card__picture img {
   width:100%;
@@ -533,7 +530,7 @@ input[type=date]::-webkit-calendar-picker-indicator {
 }
 .contact-card i {
   padding: 0 .5em;
-  color:#9c0505;
+  color:var(--color-secondary);
 }
 .contact-card h4 {
   padding:1em;
@@ -650,6 +647,9 @@ input[type=date]::-webkit-calendar-picker-indicator {
   position: absolute;
   right:0;
   bottom:-30px;
+}
+.form-container--profile input::-webkit-calendar-picker-indicator {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" viewBox="0 0 24 24"><path fill="%23bbbbbb" d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg>');
 }
 
 /* On edit */
@@ -794,7 +794,7 @@ input[type=date]::-webkit-calendar-picker-indicator {
   text-align: center;
 }
 .ql-toolbar.ql-snow {
-  background-color: #dfe6ff;
+  background-color: var(--color-divider);
 }
 .chat-new-message {
   margin:.5em 0;
@@ -853,7 +853,7 @@ input[type=date]::-webkit-calendar-picker-indicator {
   font-style: italic;
 }
 .chat-message__body.isAuthor {
-  background-color: #ff9800;
+  background-color: var(--color-secondary);
 }
 .chat-message__body.isNotAuthor {
   background-color: #00bcd4;
@@ -868,7 +868,7 @@ input[type=date]::-webkit-calendar-picker-indicator {
 }
 
 .isAuthor.chat-message__body.bubble:after {
-  border-color: transparent #ff9800 transparent transparent;
+  border-color: transparent var(--color-secondary) transparent transparent;
 }
 .isNotAuthor.chat-message__body.bubble:after {
   border-color: transparent #00bcd4 transparent transparent;
@@ -925,7 +925,9 @@ input[type=date]::-webkit-calendar-picker-indicator {
   .container {
     width:80%;
   }
-  
+  nav .logo h1 {
+    font-size: 1.6em;
+  }
   nav #hamburger-nav {
     display: block;
     position: static;
@@ -933,6 +935,9 @@ input[type=date]::-webkit-calendar-picker-indicator {
   }
   .hamburger-icon {
     display: none;
+  }
+  nav .logo {
+    width:50%;
   }
   nav .logo img {
     width:50%;
