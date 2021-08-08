@@ -182,4 +182,19 @@ class ContactController extends AbstractController
         $response = new JsonResponse($users);
         return $response;
     }
+
+     /**
+     * Route called by AJAX to search all users from the database
+     * @Route("/search", name="search")
+     * @param void
+     * @return Response
+     */
+    public function findAll(): Response
+    {
+        $users = $this->userRepository->findAll();
+      
+        return $this->json($users, 200, [], [
+            'groups'=>'contacts'
+        ]);
+    }
 }
