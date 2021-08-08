@@ -11,6 +11,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints\DateTime as ConstraintsDateTime;
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -22,6 +23,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"contacts"})
      */
     private $id;
 
@@ -31,6 +33,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * )
      * @Assert\NotBlank(message="L'email ne peut pas être vide")
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups({"contacts"})
      */
     private $email;
 
@@ -48,23 +51,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @Assert\NotBlank(message="Le login ne peut pas être vide")
      * @ORM\Column(type="string", length=255)
+     * @Groups({"contacts"})
      */
     private $login;
 
     /**
      * @Assert\NotBlank(message="Le prénom ne peut pas être vide")
      * @ORM\Column(type="string", length=255)
+     * @Groups({"contacts"})
      */
     private $firstname;
 
     /**
      * @Assert\NotBlank(message="Le nom ne peut pas être vide")
      * @ORM\Column(type="string", length=255)
+     * @Groups({"contacts"})
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"contacts"})
      */
     private $picture;
 
